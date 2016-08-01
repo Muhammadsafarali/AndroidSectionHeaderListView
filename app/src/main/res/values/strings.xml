@@ -7,5 +7,7 @@
     <string name="action_showShadow">Show shadow</string>
     <string name="action_showHeaderAndFooter">Show Header &amp; Footer</string>
     <string name="action_updateDataset">Update dataset</string>
-
+    
+    <string name="activity_projects">Проект</string>
+    
 </resources>
