@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +31,8 @@ import java.util.Set;
 /**
  * Created by safarali.alisultanov on 29.07.2016.
  */
-public class SectionItem extends ListActivity implements View.OnClickListener {
+public class SectionItem extends ListActivity implements View.OnClickListener,
+        SearchView.OnQueryTextListener {
 
     static class SimpleAdapter extends ArrayAdapter<Item> implements PinnedSectionListView.PinnedSectionListAdapter {
 
@@ -196,6 +200,7 @@ public class SectionItem extends ListActivity implements View.OnClickListener {
     private boolean addPadding;
     private boolean isShadowVisible = true;
     private int msetDatasetUpdateCount;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +213,34 @@ public class SectionItem extends ListActivity implements View.OnClickListener {
             hasHeaderAndFooter = savedInstanceState.getBoolean("hasHeaderAndFooter");
         }
         initializeAdapter();
+
+        searchView = (SearchView)findViewById(R.id.searchView);
+        setupSearchView();
+//        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                Toast.makeText(getBaseContext(), String.valueOf(hasFocus),
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//
+//                Toast.makeText(getBaseContext(), query,
+//                        Toast.LENGTH_SHORT).show();
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+////                Toast.makeText(getBaseContext(), newText,
+////                Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
     }
 
 //    private void initializePadding() {
@@ -236,6 +269,30 @@ public class SectionItem extends ListActivity implements View.OnClickListener {
 //        }
 //        initializeAdapter();
 //    }
+
+    private void setupSearchView() {
+        searchView.setOnQueryTextListener(SectionItem.this);
+//        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("Поиск");
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (TextUtils.isEmpty(newText)) {
+            Toast.makeText(getBaseContext(), "Пусто",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getBaseContext(), newText,
+                    Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
 
     @SuppressLint("NewApi")
     private void initializeAdapter() {
